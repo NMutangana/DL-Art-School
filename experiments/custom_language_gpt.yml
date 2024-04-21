@@ -125,7 +125,7 @@ path:
 
 # afaik all units here are measured in **steps** (i.e. one batch of batch_size is 1 unit)
 train: # CHANGEME: ALL OF THESE PARAMETERS SHOULD BE EXPERIMENTED WITH
-  niter: 50000
+  niter: 5000
   warmup_iter: -1
   mega_batch_factor: 4    # <-- Gradient accumulation factor. If you are running OOM, increase this to [2,4,8].
   val_freq: 500 # TODO set this to epoch size * something

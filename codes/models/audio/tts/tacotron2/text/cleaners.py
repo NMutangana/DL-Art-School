@@ -22,26 +22,40 @@ from german_transliterate.core import GermanTransliterate
 _whitespace_re = re.compile(r'\s+')
 
 # List of (regular expression, replacement) pairs for abbreviations:
-_abbreviations = [(re.compile('\\b%s\\.' % x[0], re.IGNORECASE), x[1]) for x in [
-  ('mrs', 'misess'),
-  ('mr', 'mister'),
-  ('dr', 'doctor'),
-  ('st', 'saint'),
-  ('co', 'company'),
-  ('jr', 'junior'),
-  ('maj', 'major'),
-  ('gen', 'general'),
-  ('drs', 'doctors'),
-  ('rev', 'reverend'),
-  ('lt', 'lieutenant'),
-  ('hon', 'honorable'),
-  ('sgt', 'sergeant'),
-  ('capt', 'captain'),
-  ('esq', 'esquire'),
-  ('ltd', 'limited'),
-  ('col', 'colonel'),
-  ('ft', 'fort'),
-]]
+# _abbreviations = [(re.compile('\\b%s\\.' % x[0], re.IGNORECASE), x[1]) for x in [
+#   ('mrs', 'misess'),
+#   ('mr', 'mister'),
+#   ('dr', 'doctor'),
+#   ('st', 'saint'),
+#   ('co', 'company'),
+#   ('jr', 'junior'),
+#   ('maj', 'major'),
+#   ('gen', 'general'),
+#   ('drs', 'doctors'),
+#   ('rev', 'reverend'),
+#   ('lt', 'lieutenant'),
+#   ('hon', 'honorable'),
+#   ('sgt', 'sergeant'),
+#   ('capt', 'captain'),
+#   ('esq', 'esquire'),
+#   ('ltd', 'limited'),
+#   ('col', 'colonel'),
+#   ('ft', 'fort'),
+# ]]
+
+_abbreviations = [
+    (re.compile("\\b%s\\." % x[0], re.IGNORECASE), x[1])
+    for x in  [
+       ('Bw.', 'Bwana'),
+       ('Bi.', 'Bibi'), 
+       ('sh.', 'shilingi'),
+       ('Dkt', 'Daktari'), 
+       ('–', 'hadi'),
+       ('prof' , 'profesa'),
+       ('n.k.' , 'na kadhalika'),
+        ('pst', 'pasta')
+    ]
+]
 
 
 def expand_abbreviations(text):
@@ -83,8 +97,10 @@ def transliteration_cleaners(text):
 
 def english_cleaners(text):
   '''Pipeline for English text, including number and abbreviation expansion.'''
-  text = GermanTransliterate().transliterate(text)
+  text = convert_to_ascii(text)
   text = lowercase(text)
+  text = expand_numbers(text)
+  text = expand_abbreviations(text)
   text = collapse_whitespace(text)
   text = text.replace('"', '')
   return text
